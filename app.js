@@ -14,6 +14,7 @@ mongoose
 
 // middleware
 app.use(morgan("dev"));
+app.use("/", require("./routes/post.js"));
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
