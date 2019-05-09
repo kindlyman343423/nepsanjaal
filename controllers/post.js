@@ -1,9 +1,9 @@
 const Post = require("../models/Post");
 
-exports.getPosts = (req, res) => {
-  res.json({
-    posts: [{ title: "First post" }, { title: "Second post" }]
-  });
+exports.getPosts = async (req, res) => {
+  const posts = await Post.find().select("_id title body");
+
+  res.json({ posts });
 };
 
 exports.createPost = async (req, res) => {
@@ -14,5 +14,4 @@ exports.createPost = async (req, res) => {
   res.status(200).json({
     post: savedpost
   });
-
 };

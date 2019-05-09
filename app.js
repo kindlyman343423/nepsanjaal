@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const expressValidator = require("express-validator");
+require("express-async-errors")
 dotenv.config();
 
 mongoose
@@ -19,6 +20,12 @@ app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(expressValidator());
 app.use("/", require("./routes/post"));
+
+// Error handling middleware
+app.use(function(err, req, res, next) {
+  console.log(err)
+  res.status(500).send("Something failed...");
+});
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
