@@ -20,6 +20,7 @@ app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(expressValidator());
 app.use("/", require("./routes/post"));
+app.use("/", require("./routes/auth"));
 
 // Error handling middleware
 app.use(function(err, req, res, next) {
