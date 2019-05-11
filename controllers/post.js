@@ -2,6 +2,17 @@ const Post = require("../models/Post");
 const formidable = require("formidable");
 const fs = require("fs");
 
+exports.postById = async (req, res, next, id) => {
+  const post = await Post.findById(id).populate("postedBy", "name");
+  if (!post) {
+    return res.status(400).json({
+      error: "Post not found"
+    });
+  }
+  req.post = post; // adds post object in req with post info
+  next();
+};
+
 exports.getPosts = async (req, res) => {
   const posts = await Post.find()
     .populate("postedBy", "name")
@@ -38,4 +49,14 @@ exports.postByUser = async (req, res) => {
     .populate("postedBy", "name")
     .sort({ created: -1 });
   res.json({ posts });
+};
+
+exports.getPostByPostId = async (req, res) =>{
+  res.json(req.post);
+}
+
+exports.deletePostById = async (req, res) => {
+  let post = req.post;
+  await post.remove();
+  res.json({ message: "Post deleted successfully" });
 };

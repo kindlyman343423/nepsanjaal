@@ -56,9 +56,9 @@ exports.requireSignin = async (req, res, next) => {
     if (founduser) {
       req.auth = founduser;
       next();
-    } else res.status(401).json({error: "Not authorized"});
+    } else res.status(401).json({ error: "Not authorized" });
   } else {
-    res.status(401).json({error: "Not authorized"});
+    res.status(401).json({ error: "Not authorized" });
   }
 };
 
@@ -69,11 +69,21 @@ function parseToken(token) {
 }
 
 exports.hasAuthorization = (req, res, next) => {
-  const authorized =
-    req.profile && req.auth && req.profile._id == req.auth._id;
+  const authorized = req.profile && req.auth && req.profile._id == req.auth._id;
   if (!authorized) {
     return res.status(403).json({
       error: "User is not authorized to perform this action"
+    });
+  }
+  next();
+};
+
+exports.isPoster = (req, res, next) => {
+  let isPoster = req.post && req.auth && req.post.postedBy._id.toString() === req.auth._id.toString();
+
+  if (!isPoster) {
+    return res.status(403).json({
+      error: "User is not authorized"
     });
   }
   next();
