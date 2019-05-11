@@ -83,7 +83,7 @@ exports.isPoster = (req, res, next) => {
 
   if (!isPoster) {
     return res.status(403).json({
-      error: "User is not authorized"
+      error: "User is not authorized to perform this action"
     });
   }
   next();

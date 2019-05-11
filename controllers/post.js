@@ -1,6 +1,7 @@
 const Post = require("../models/Post");
 const formidable = require("formidable");
 const fs = require("fs");
+const _ = require("lodash");
 
 exports.postById = async (req, res, next, id) => {
   const post = await Post.findById(id).populate("postedBy", "name");
@@ -54,6 +55,20 @@ exports.postByUser = async (req, res) => {
 exports.getPostByPostId = async (req, res) =>{
   res.json(req.post);
 }
+
+exports.updatePostById = async (req, res) => {
+  let post = req.post;
+  post = _.extend(post, req.body); // extend - mutate the source object
+  post.updated = Date.now();
+  post.save(err => {
+    if (err) {
+      return res.status(400).json({
+        error: "You are not authorized to perform this action"
+      });
+    }
+    res.json({ post });
+  });
+};
 
 exports.deletePostById = async (req, res) => {
   let post = req.post;
