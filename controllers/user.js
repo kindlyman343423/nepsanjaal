@@ -13,16 +13,6 @@ exports.userById = async (req, res, next, id) => {
   next();
 };
 
-exports.hasAuthorization = (req, res, next) => {
-  const authorized =
-    req.profile && req.auth && req.profile._id === req.auth._id;
-  if (!authorized) {
-    return res.status(403).json({
-      error: "User is not authorized to perform this action"
-    });
-  }
-};
-
 exports.getAllUsers = async (req, res) => {
   const users = await User.find().select("name email created updated");
 
@@ -30,6 +20,7 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.getUserById = async (req, res) => {
+  console.log(req.profile._id == req.auth._id)
   req.profile.hashed_password = undefined;
   req.profile.salt = undefined;
   return res.json(req.profile);
@@ -49,4 +40,10 @@ exports.updateUserById = async (req, res) => {
     user.salt = undefined;
     res.json({ user });
   });
+};
+
+exports.deleteUser = async (req, res) => {
+  let user = req.profile;
+  await user.remove();
+  res.json({ message: "User deleted successfully" });
 };
