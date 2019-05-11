@@ -14,7 +14,7 @@ router.get("/users", getAllUsers);
 
 router
   .route("/user/:userId")
-  .get(requireSignin, hasAuthorization, getUserById)
+  .get(requireSignin, getUserById)
   .put(requireSignin, hasAuthorization, updateUserById)
   .delete(requireSignin, hasAuthorization, deleteUser);
 
