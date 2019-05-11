@@ -54,11 +54,11 @@ exports.requireSignin = async (req, res, next) => {
     const founduser = await User.findById(user._id);
 
     if (founduser) {
-      res.locals.user = user;
+      req.auth = user;
       next();
-    } else res.status(401).json("Not authorized");
+    } else res.status(401).json({error: "Not authorized"});
   } else {
-    res.status(401).json("Not authorized");
+    res.status(401).json({error: "Not authorized"});
   }
 };
 
