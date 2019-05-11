@@ -3,20 +3,12 @@ const formidable = require("formidable");
 const fs = require("fs");
 
 exports.getPosts = async (req, res) => {
-  const posts = await Post.find().select("_id title body");
+  const posts = await Post.find()
+    .populate("postedBy", "name")
+    .select("_id title body");
 
   res.json({ posts });
 };
-
-// exports.createPost = async (req, res) => {
-//   const post = new Post(req.body);
-
-//   const savedpost = await post.save();
-
-//   res.status(200).json({
-//     post: savedpost
-//   });
-// };
 
 exports.createPost = (req, res, next) => {
   let form = new formidable.IncomingForm();
@@ -39,4 +31,11 @@ exports.createPost = (req, res, next) => {
     const result = await post.save();
     res.json(result);
   });
+};
+
+exports.postByUser = async (req, res) => {
+  const posts = await Post.find({ postedBy: req.profile._id })
+    .populate("postedBy", "name")
+    .sort({ created: -1 });
+  res.json({ posts });
 };
