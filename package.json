@@ -4,7 +4,9 @@
   "description": "A MERN stack social networking app",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "server": "nodemon app",
+    "client": "cd client && yarn start"
   },
   "keywords": [
     "node",
