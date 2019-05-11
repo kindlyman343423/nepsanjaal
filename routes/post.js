@@ -7,7 +7,7 @@ const {createPostValidator} = require("../validator");
 const router = express.Router();
 
 
-router.get("/",requireSignin, getPosts);
+router.get("/", getPosts);
 router.post("/post", requireSignin, createPostValidator, createPost);
 
 // any route containing :userId, our app will first execute userByID()

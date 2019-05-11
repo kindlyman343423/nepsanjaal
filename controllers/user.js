@@ -21,3 +21,11 @@ exports.hasAuthorization = (req, res, next) => {
     });
   }
 };
+
+exports.getAllUsers = async (req, res) =>{
+
+ const users = await User.find().select("name email created updated");
+
+ res.json({users})
+
+}

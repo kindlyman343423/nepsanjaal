@@ -23,6 +23,11 @@ app.use(cookieParser())
 app.use(expressValidator());
 app.use("/", require("./routes/post"));
 app.use("/", require("./routes/auth"));
+app.use("/", require("./routes/user"));
+
+app.use("*", (req, res)=>{
+  res.status(404).json({error: "No route found"})
+})
 
 // Error handling middleware
 app.use(function(err, req, res, next) {
