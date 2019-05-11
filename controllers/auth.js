@@ -39,3 +39,8 @@ exports.signin = async (req, res) => {
   const {_id, email: mail, name} = user;
   return res.json({ token, user: {_id, mail, name}});
 };
+
+exports.signout = (req, res) =>{
+  res.clearCookie("t");
+  res.json({"message": "Successfully signed out"})
+}
