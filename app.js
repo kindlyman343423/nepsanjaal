@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const expressValidator = require("express-validator");
-require("express-async-errors")
+require("express-async-errors");
 dotenv.config();
 
 mongoose
@@ -19,19 +19,19 @@ mongoose
 // middleware
 app.use(morgan("dev"));
 app.use(bodyParser.json());
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(expressValidator());
 app.use("/", require("./routes/post"));
 app.use("/", require("./routes/auth"));
 app.use("/", require("./routes/user"));
 
-app.use("*", (req, res)=>{
-  res.status(404).json({error: "No route found"})
-})
+app.use("*", (req, res) => {
+  res.status(404).json({ error: "No route found" });
+});
 
 // Error handling middleware
 app.use(function(err, req, res, next) {
-  console.log(err)
+  console.log(err);
   res.status(500).send("Something failed...");
 });
 
