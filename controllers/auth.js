@@ -36,11 +36,34 @@ exports.signin = async (req, res) => {
   res.cookie("t", token, { expire: new Date() + 9999 });
   // retrun response with user and token to frontend client
 
-  const {_id, email: mail, name} = user;
-  return res.json({ token, user: {_id, mail, name}});
+  const { _id, email: mail, name } = user;
+  return res.json({ token, user: { _id, mail, name } });
 };
 
-exports.signout = (req, res) =>{
+exports.signout = (req, res) => {
   res.clearCookie("t");
-  res.json({"message": "Successfully signed out"})
+  res.json({ message: "Successfully signed out" });
+};
+
+exports.requireSignin = async (req, res, next) => {
+  const token = req.headers.authorization;
+
+  if (token) {
+    const user = parseToken(token);
+
+    const founduser = await User.findById(user._id);
+
+    if (founduser) {
+      res.locals.user = user;
+      next();
+    } else res.status(401).json("Not authorized");
+  } else {
+    res.status(401).json("Not authorized");
+  }
+};
+
+function parseToken(token) {
+  // For cookie
+  //   jwt.verify(token.split(";")[1].split("=")[1], process.env.JWT_SECRET)
+  return jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
 }
