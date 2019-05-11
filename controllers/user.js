@@ -16,11 +16,11 @@ exports.userById = async (req, res, next, id) => {
 exports.getAllUsers = async (req, res) => {
   const users = await User.find().select("name email created updated");
 
-  res.json({ users });
+  res.json(users);
 };
 
 exports.getUserById = async (req, res) => {
-  console.log(req.profile._id == req.auth._id)
+  console.log(req.profile._id == req.auth._id);
   req.profile.hashed_password = undefined;
   req.profile.salt = undefined;
   return res.json(req.profile);

@@ -14,7 +14,7 @@ const { createPostValidator } = require("../validator");
 
 const router = express.Router();
 
-router.get("/", getPosts);
+router.get("/posts", getPosts);
 router.post("/post", requireSignin, createPost, createPostValidator);
 router.get("/posts/by/:userId", requireSignin, postByUser);
 router.get("/post/:postId", requireSignin, getPostByPostId);
