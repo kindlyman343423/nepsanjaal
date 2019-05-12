@@ -63,9 +63,13 @@ exports.requireSignin = async (req, res, next) => {
 };
 
 function parseToken(token) {
-  // For cookie
-  //   jwt.verify(token.split(";")[1].split("=")[1], process.env.JWT_SECRET)
-  return jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
+  try {
+    // For cookie
+    //   jwt.verify(token.split(";")[1].split("=")[1], process.env.JWT_SECRET)
+    return jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
+  } catch (err) {
+    return Error({error: err.message});
+  }
 }
 
 exports.hasAuthorization = (req, res, next) => {
@@ -79,7 +83,10 @@ exports.hasAuthorization = (req, res, next) => {
 };
 
 exports.isPoster = (req, res, next) => {
-  let isPoster = req.post && req.auth && req.post.postedBy._id.toString() === req.auth._id.toString();
+  let isPoster =
+    req.post &&
+    req.auth &&
+    req.post.postedBy._id.toString() === req.auth._id.toString();
 
   if (!isPoster) {
     return res.status(403).json({

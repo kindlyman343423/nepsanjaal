@@ -23,6 +23,7 @@ exports.getUserById = async (req, res) => {
   console.log(req.profile._id == req.auth._id);
   req.profile.hashed_password = undefined;
   req.profile.salt = undefined;
+  console.log(req.profile)
   return res.json(req.profile);
 };
 

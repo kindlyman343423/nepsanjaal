@@ -11,21 +11,25 @@ class Profile extends Component {
     };
   }
 
-  async componentDidMount() {
-    const userId = this.props.match.params.userId;
-    const data = await getProfile(userId);
-    console.log(data);
+  init = async userId => {
+    const token = isAuthenticated().token;
+    const data = await getProfile(userId, token);
     if (data.error) {
       this.setState({ redirectToSignin: true });
     } else {
       this.setState({ user: data });
     }
+  };
+
+  componentDidMount() {
+    const userId = this.props.match.params.userId;
+    this.init(userId);
   }
 
   render() {
-    console.log(isAuthenticated());
     const redirectToSignin = this.state.redirectToSignin;
-    if (redirectToSignin || !isAuthenticated()) return <Redirect to="/signin" />;
+    if (redirectToSignin || !isAuthenticated())
+      return <Redirect to="/signin" />;
 
     return (
       <div className="container">

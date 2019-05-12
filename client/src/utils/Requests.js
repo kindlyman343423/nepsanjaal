@@ -33,13 +33,13 @@ export const signin = user => {
     .catch(err => console.log(err));
 };
 
-export const getProfile = userId => {
+export const getProfile = (userId, token) => {
   return fetch(`${base_url}/user/${userId}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${isAuthenticated().token}`
+      Authorization: `Bearer ${token}`
     }
   })
     .then(response => {
