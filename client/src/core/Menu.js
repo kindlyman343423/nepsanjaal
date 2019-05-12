@@ -3,7 +3,6 @@ import { Link, withRouter } from "react-router-dom";
 import { signout, isAuthenticated } from "../utils/Requests";
 
 const isActive = (history, path) => {
-  console.log(isAuthenticated());
   if (history.location.pathname === path) return { color: "#ff9900" };
   else return { color: "#ffffff" };
 };
