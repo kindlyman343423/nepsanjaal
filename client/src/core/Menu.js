@@ -1,15 +1,16 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import {signout} from '../utils/Requests';
+import { signout, isAuthenticated } from "../utils/Requests";
 
 const isActive = (history, path) => {
+  console.log(isAuthenticated());
   if (history.location.pathname === path) return { color: "#ff9900" };
   else return { color: "#ffffff" };
 };
 
-const Menu = ({ history }) => (
-  <div>
-    <ul className="nav nav-tabs bg-primary">
+const renderLinks = history =>
+  !isAuthenticated() ? (
+    <>
       <li className="nav-item">
         <Link className="nav-link" style={isActive(history, "/")} to="/">
           Home
@@ -33,9 +34,17 @@ const Menu = ({ history }) => (
           Sign Up
         </Link>
       </li>
+    </>
+  ) : (
+    <>
       <li className="nav-item">
+        <Link className="nav-link" style={isActive(history, "/")} to="/">
+          Home
+        </Link>
+      </li>
+      <li className="nav-item mr-auto">
         <Link
-         href={" "}
+          href={" "}
           className="nav-link"
           style={
             (isActive(history, "/signup"), { cursor: "pointer", color: "#fff" })
@@ -45,7 +54,12 @@ const Menu = ({ history }) => (
           Sign Out
         </Link>
       </li>
-    </ul>
+    </>
+  );
+
+const Menu = ({ history }) => (
+  <div>
+    <ul className="nav nav-tabs bg-primary">{renderLinks(history)}</ul>
   </div>
 );
 
