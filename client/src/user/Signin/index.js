@@ -11,7 +11,8 @@ class Signin extends Component {
       email: "",
       password: "",
       error: "",
-      redirectToReferer: false
+      redirectToReferer: false,
+      loading: false
     };
   }
 
@@ -20,29 +21,28 @@ class Signin extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  clickSubmit = event => {
+  clickSubmit = async event => {
     event.preventDefault();
+    this.setState({ loading: true });
     const { email, password } = this.state;
     const user = {
       email,
       password
     };
-    signin(user).then(data => {
-      if (data.error) {
-        this.setState({ error: data.error });
-      } else {
-        // authenticate
-        authenticate(data, () => {
-          this.setState({ redirectToReferer: true });
-        });
-      }
-    });
+
+    const data = await signin(user);
+    if (data.error) {
+      this.setState({ error: data.error, loading: false });
+    } else {
+      // authenticate
+      authenticate(data, () => {
+        this.setState({ redirectToReferer: true });
+      });
+    }
   };
 
   render() {
-    const { error, redirectToReferer } = this.state;
-
-    console.log(this.state);
+    const { error, redirectToReferer, loading } = this.state;
 
     if (redirectToReferer) {
       return <Redirect to="/" />;
@@ -53,6 +53,12 @@ class Signin extends Component {
         <h2 className="mt-5 mb-5">SignIn</h2>
 
         {error && <div className="alert alert-danger">{error}</div>}
+
+        {loading && (
+          <div className="jumbotron text-center">
+            <h2>Loading...</h2>
+          </div>
+        )}
 
         <SigninForm
           stateValues={this.state}
