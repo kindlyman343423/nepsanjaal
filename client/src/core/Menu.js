@@ -42,8 +42,8 @@ const renderLinks = history =>
           Home
         </Link>
       </li>
-      <li className="nav-item mr-auto">
-        <Link
+      <li className="nav-item">
+        <a
           href={" "}
           className="nav-link"
           style={
@@ -52,6 +52,11 @@ const renderLinks = history =>
           onClick={() => signout(() => history.push("/"))}
         >
           Sign Out
+        </a>
+      </li>
+      <li className="nav-item">
+        <Link className="nav-link" to={`/user/${isAuthenticated().user._id}`}>
+          {isAuthenticated().user.name + "'s Profile"}
         </Link>
       </li>
     </>

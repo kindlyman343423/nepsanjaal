@@ -54,17 +54,17 @@ class Signin extends Component {
 
         {error && <div className="alert alert-danger">{error}</div>}
 
-        {loading && (
+        {loading ? (
           <div className="jumbotron text-center">
             <h2>Loading...</h2>
           </div>
-        )}
-
+        ) : 
         <SigninForm
           stateValues={this.state}
           handleChange={this.handleChange}
           clickSubmit={this.clickSubmit}
         />
+        }
       </div>
     );
   }
