@@ -54,7 +54,20 @@ const renderLinks = history =>
         </a>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to={`/user/${isAuthenticated().user._id}`}>
+        <Link
+          className="nav-link"
+          style={isActive(history, "/users")}
+          to="/users"
+        >
+          Users
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link
+          className="nav-link"
+          to={`/user/${isAuthenticated().user._id}`}
+          style={isActive(history, `/user/${isAuthenticated().user._id}`)}
+        >
           {isAuthenticated().user.name + "'s Profile"}
         </Link>
       </li>

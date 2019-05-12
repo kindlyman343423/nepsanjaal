@@ -50,6 +50,16 @@ export const getProfile = (userId, token) => {
     });
 };
 
+export const getAllUsers = () => {
+ return fetch(`${base_url}/users`, {
+     method: "GET"
+ })
+     .then(response => {
+         return response.json();
+     })
+     .catch(err => console.log(err));
+};
+
 export const signout = next => {
   if (typeof window !== "undefined") localStorage.removeItem("jwt");
   next();
