@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { signup } from "../utils/Requests";
 
 class Signup extends Component {
   constructor() {
@@ -7,15 +8,17 @@ class Signup extends Component {
       name: "",
       email: "",
       password: "",
-      error: ""
+      error: "",
+      open: false
     };
   }
 
   handleChange = event => {
+    this.setState({error: "", open: false});
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  clickSubmit = event => {
+  clickSubmit = async event => {
     event.preventDefault();
     const { name, email, password } = this.state;
     const user = {
@@ -23,28 +26,33 @@ class Signup extends Component {
       email,
       password
     };
-    // console.log(user);
-    fetch("http://localhost:8080/signup", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(user)
-    })
-      .then(response => {
-       console.log(JSON.stringify(response))
-        return response.json();
-      })
-      .catch(err => console.log(err));
+
+    const data = await signup(user);
+    if (data.error) this.setState({ error: data.error });
+    else
+      this.setState({
+        error: "",
+        name: "",
+        email: "",
+        password: "",
+        open: true
+      });
   };
 
   render() {
-    const { name, email, password } = this.state;
+    const { name, email, password, error, open } = this.state;
+    console.log(this.state);
     return (
       <div className="container">
         <h2 className="mt-5 mb-5">Signup</h2>
 
+        {error && 
+         <div className="alert alert-danger">{error}</div>
+        }
+
+        {open && 
+         <div className="alert alert-success">Successfully created account</div>
+        }
         <form>
           <div className="form-group">
             <label className="text-muted">Name</label>
