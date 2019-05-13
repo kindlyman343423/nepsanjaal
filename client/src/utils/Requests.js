@@ -33,6 +33,21 @@ export const signin = user => {
     .catch(err => console.log(err));
 };
 
+export const removeUser = (userId, token) => {
+  return fetch(`${base_url}/user/${userId}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
 export const getProfile = (userId, token) => {
   return fetch(`${base_url}/user/${userId}`, {
     method: "GET",
@@ -51,13 +66,13 @@ export const getProfile = (userId, token) => {
 };
 
 export const getAllUsers = () => {
- return fetch(`${base_url}/users`, {
-     method: "GET"
- })
-     .then(response => {
-         return response.json();
-     })
-     .catch(err => console.log(err));
+  return fetch(`${base_url}/users`, {
+    method: "GET"
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
 };
 
 export const signout = next => {

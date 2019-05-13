@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { isAuthenticated, getProfile } from "../../utils/Requests";
 import { Redirect, Link } from "react-router-dom";
 import DefaultProfile from "../../images/avatar.jpg";
+import DeleteUser from "./DeleteProfile";
 
 class Profile extends Component {
   constructor() {
@@ -68,9 +69,7 @@ class Profile extends Component {
                 >
                   Edit Profile
                 </Link>
-                <button className="btn btn-raised btn-danger">
-                  Delete Profile
-                </button>
+                <DeleteUser userId={user._id} />
               </div>
             )}
           </div>
