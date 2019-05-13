@@ -33,6 +33,39 @@ export const signin = user => {
     .catch(err => console.log(err));
 };
 
+export const signout = next => {
+  if (typeof window !== "undefined") localStorage.removeItem("jwt");
+  next();
+  return fetch(`${base_url}/signout`, {
+    method: "GET"
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
+export const authenticate = (jwt, next) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("jwt", JSON.stringify(jwt));
+    next();
+  }
+};
+
+export const isAuthenticated = () => {
+  if (typeof window == "undefined") {
+    return false;
+  }
+
+  if (localStorage.getItem("jwt")) {
+    return JSON.parse(localStorage.getItem("jwt"));
+  } else {
+    return false;
+  }
+};
+
+//User requests
+
 export const removeUser = (userId, token) => {
   return fetch(`${base_url}/user/${userId}`, {
     method: "DELETE",
@@ -75,11 +108,14 @@ export const getAllUsers = () => {
     .catch(err => console.log(err));
 };
 
-export const signout = next => {
-  if (typeof window !== "undefined") localStorage.removeItem("jwt");
-  next();
-  return fetch(`${base_url}/signout`, {
-    method: "GET"
+export const getUserById = (userId, token) => {
+  return fetch(`${base_url}/user/${userId}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
   })
     .then(response => {
       return response.json();
@@ -87,21 +123,18 @@ export const signout = next => {
     .catch(err => console.log(err));
 };
 
-export const authenticate = (jwt, next) => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("jwt", JSON.stringify(jwt));
-    next();
-  }
-};
-
-export const isAuthenticated = () => {
-  if (typeof window == "undefined") {
-    return false;
-  }
-
-  if (localStorage.getItem("jwt")) {
-    return JSON.parse(localStorage.getItem("jwt"));
-  } else {
-    return false;
-  }
+export const updateUser = (userId, token, user) => {
+  return fetch(`${base_url}/user/${userId}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(user)
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
 };

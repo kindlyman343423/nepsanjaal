@@ -43,7 +43,6 @@ class Signup extends Component {
 
   render() {
     const { error, open } = this.state;
-    console.log(this.state);
     return (
       <div className="container">
         <h2 className="mt-5 mb-5">Signup</h2>
