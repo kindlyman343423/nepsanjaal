@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { signup } from "../../utils/Requests";
 import SignupForm from "./SignupForm";
+import { Link } from "react-router-dom";
 
 class Signup extends Component {
   constructor() {
@@ -15,7 +16,7 @@ class Signup extends Component {
   }
 
   handleChange = event => {
-    this.setState({error: "", open: false});
+    this.setState({ error: "", open: false });
     this.setState({ [event.target.name]: event.target.value });
   };
 
@@ -47,18 +48,19 @@ class Signup extends Component {
       <div className="container">
         <h2 className="mt-5 mb-5">Signup</h2>
 
-        {error && 
-         <div className="alert alert-danger">{error}</div>
-        }
+        {error && <div className="alert alert-danger">{error}</div>}
 
-        {open && 
-         <div className="alert alert-success">Successfully created account</div>
-        }
-       <SignupForm 
-        stateValues = {this.state}
-        handleChange={this.handleChange}
-        clickSubmit={this.clickSubmit}
-       />
+        {open && (
+          <div className="alert alert-success">
+            Successfully created account. Please{" "}
+            <Link to="/signin">Sign In</Link>
+          </div>
+        )}
+        <SignupForm
+          stateValues={this.state}
+          handleChange={this.handleChange}
+          clickSubmit={this.clickSubmit}
+        />
       </div>
     );
   }
