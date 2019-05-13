@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { getAllUsers } from "../../utils/Requests";
-
+import DefaultProfile from "../../images/avatar.jpg";
+import RenderUsers from "./RenderUsers";
 class Users extends Component {
   constructor() {
     super();
@@ -24,14 +25,7 @@ class Users extends Component {
     return (
       <div className="container">
         <h2 className="mt-5 mb-5">Users</h2>
-
-        <div className="card">
-          {users.map((user, i) => (
-            <div key={i}>
-              <p>{user.name}</p>
-            </div>
-          ))}
-        </div>
+        <RenderUsers users={users} DefaultProfile={DefaultProfile} />
       </div>
     );
   }

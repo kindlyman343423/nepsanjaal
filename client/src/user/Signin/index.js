@@ -42,6 +42,7 @@ class Signin extends Component {
   };
 
   render() {
+    console.log(this.state)
     const { error, redirectToReferer, loading } = this.state;
 
     if (redirectToReferer) {
