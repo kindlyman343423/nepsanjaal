@@ -124,14 +124,14 @@ export const getUserById = (userId, token) => {
 };
 
 export const updateUser = (userId, token, user) => {
+  console.log("USER DATA UPDATE: ", user);
   return fetch(`${base_url}/user/${userId}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`
     },
-    body: JSON.stringify(user)
+    body: user
   })
     .then(response => {
       return response.json();

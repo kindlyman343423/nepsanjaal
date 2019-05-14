@@ -32,6 +32,7 @@ class EditProfile extends Component {
   };
 
   componentDidMount() {
+    this.userData = new FormData();
     const userId = this.props.match.params.userId;
     this.init(userId);
   }
@@ -57,7 +58,12 @@ class EditProfile extends Component {
   };
 
   handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    const value =
+      event.target.name === "photo"
+        ? event.target.files[0]
+        : event.target.value;
+    this.userData.set(event.target.name, value);
+    this.setState({ [event.target.name]: value });
   };
 
   clickSubmit = async event => {
@@ -74,7 +80,7 @@ class EditProfile extends Component {
       const userId = this.props.match.params.userId;
       const token = isAuthenticated().token;
 
-      const data = await updateUser(userId, token, user);
+      const data = await updateUser(userId, token, this.userData);
       if (data.error) this.setState({ error: data.error });
       else
         this.setState({

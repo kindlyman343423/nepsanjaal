@@ -6,6 +6,16 @@ const _EditForm = props => {
   return (
     <form>
       <div className="form-group">
+        <label className="text-muted">Profile Photo</label>
+        <input
+          onChange={handleChange}
+          name="photo"
+          type="file"
+          accept="image/*"
+          className="form-control"
+        />
+      </div>
+      <div className="form-group">
         <label className="text-muted">Name</label>
         <input
           onChange={handleChange}
