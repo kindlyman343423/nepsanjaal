@@ -4,7 +4,7 @@ const formidable = require("formidable");
 const fs = require("fs");
 
 exports.userById = async (req, res, next, id) => {
-  const user = await User.findById(id).select("email name created updated");
+  const user = await User.findById(id).select("email name created updated photo");
 
   if (!user) {
     return res.status(400).json({
@@ -59,6 +59,15 @@ exports.updateUserById = async (req, res) => {
       res.json(user);
     });
   });
+};
+
+exports.userPhoto = (req, res, next) => {
+  console.log(req.profile)
+  if (req.profile.photo.data) {
+    res.set(("Content-Type", req.profile.photo.contentType));
+    return res.send(req.profile.photo.data);
+  }
+  next();
 };
 
 exports.deleteUser = async (req, res) => {

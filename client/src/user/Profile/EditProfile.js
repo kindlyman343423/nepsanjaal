@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { isAuthenticated, getUserById, updateUser } from "../../utils/Requests";
 import EditForm from "./_EditForm";
 import { Redirect } from "react-router-dom";
+import DefaultProfile from "../../images/avatar.jpg";
 
 class EditProfile extends Component {
   constructor() {
@@ -42,7 +43,10 @@ class EditProfile extends Component {
   isValid = () => {
     const { name, email, password, fileSize } = this.state;
     if (fileSize > 100000) {
-      this.setState({ error: "File size should be less than 100kb", loading: false });
+      this.setState({
+        error: "File size should be less than 100kb",
+        loading: false
+      });
       return false;
     }
     if (name.length === 0) {
@@ -56,7 +60,8 @@ class EditProfile extends Component {
     }
     if (password.length >= 1 && password.length <= 5) {
       this.setState({
-        error: "Password must be at least 6 characters long", loading: false
+        error: "Password must be at least 6 characters long",
+        loading: false
       });
       return false;
     }
@@ -95,9 +100,15 @@ class EditProfile extends Component {
   };
 
   render() {
+    const { id, name } = this.state;
+
     if (this.state.redirectToProfile) {
       return <Redirect to={`/user/${this.state.id}`} />;
     }
+
+    const photoUrl = id
+      ? `http://localhost:8080/user/photo/${id}?${new Date().getTime()}`
+      : DefaultProfile;
 
     return (
       <div className="container">
@@ -111,11 +122,20 @@ class EditProfile extends Component {
             <h2>Loading...</h2>
           </div>
         ) : (
-          <EditForm
-            stateValues={this.state}
-            handleChange={this.handleChange}
-            clickSubmit={this.clickSubmit}
-          />
+          <>
+            <img
+              style={{ height: "200px", width: "auto" }}
+              className="img-thumbnail"
+              src={photoUrl}
+              onError={i => (i.target.src = `${DefaultProfile}`)}
+              alt={name}
+            />
+            <EditForm
+              stateValues={this.state}
+              handleChange={this.handleChange}
+              clickSubmit={this.clickSubmit}
+            />
+          </>
         )}
       </div>
     );
