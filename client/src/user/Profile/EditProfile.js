@@ -12,7 +12,9 @@ class EditProfile extends Component {
       email: "",
       password: "",
       redirectToProfile: false,
-      error: ""
+      error: "",
+      fileSize: 0,
+      loading: false
     };
   }
 
@@ -38,19 +40,23 @@ class EditProfile extends Component {
   }
 
   isValid = () => {
-    const { name, email, password } = this.state;
+    const { name, email, password, fileSize } = this.state;
+    if (fileSize > 100000) {
+      this.setState({ error: "File size should be less than 100kb", loading: false });
+      return false;
+    }
     if (name.length === 0) {
-      this.setState({ error: "Name is required" });
+      this.setState({ error: "Name is required", loading: false });
       return false;
     }
     // email@domain.com
     if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-      this.setState({ error: "A valid Email is required" });
+      this.setState({ error: "A valid Email is required", loading: false });
       return false;
     }
     if (password.length >= 1 && password.length <= 5) {
       this.setState({
-        error: "Password must be at least 6 characters long"
+        error: "Password must be at least 6 characters long", loading: false
       });
       return false;
     }
@@ -58,30 +64,29 @@ class EditProfile extends Component {
   };
 
   handleChange = event => {
+    this.setState({ error: "" });
     const value =
       event.target.name === "photo"
         ? event.target.files[0]
         : event.target.value;
+    const fileSize =
+      event.target.name === "photo" ? event.target.files[0].size : 0;
     this.userData.set(event.target.name, value);
     this.setState({ [event.target.name]: value });
+    this.setState({ [event.target.name]: value, fileSize });
   };
 
   clickSubmit = async event => {
     event.preventDefault();
 
-    if (this.isValid()) {
-      const { name, email, password } = this.state;
-      const user = {
-        name,
-        email,
-        password: password || undefined
-      };
+    this.setState({ loading: true });
 
+    if (this.isValid()) {
       const userId = this.props.match.params.userId;
       const token = isAuthenticated().token;
 
       const data = await updateUser(userId, token, this.userData);
-      if (data.error) this.setState({ error: data.error });
+      if (data.error) this.setState({ error: data.error, loading: false });
       else
         this.setState({
           redirectToProfile: true
@@ -101,12 +106,17 @@ class EditProfile extends Component {
         {this.state.error && (
           <div className="alert alert-danger">{this.state.error}</div>
         )}
-
-        <EditForm
-          stateValues={this.state}
-          handleChange={this.handleChange}
-          clickSubmit={this.clickSubmit}
-        />
+        {this.state.loading ? (
+          <div className="jumbotron text-center">
+            <h2>Loading...</h2>
+          </div>
+        ) : (
+          <EditForm
+            stateValues={this.state}
+            handleChange={this.handleChange}
+            clickSubmit={this.clickSubmit}
+          />
+        )}
       </div>
     );
   }
