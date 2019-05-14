@@ -11,7 +11,8 @@ class EditProfile extends Component {
       name: "",
       email: "",
       password: "",
-      redirectToProfile: false
+      redirectToProfile: false,
+      error: ""
     };
   }
 
@@ -24,7 +25,8 @@ class EditProfile extends Component {
       this.setState({
         id: data._id,
         name: data.name,
-        email: data.email
+        email: data.email,
+        error: ""
       });
     }
   };
@@ -34,28 +36,51 @@ class EditProfile extends Component {
     this.init(userId);
   }
 
+  isValid = () => {
+    const { name, email, password } = this.state;
+    if (name.length === 0) {
+      this.setState({ error: "Name is required" });
+      return false;
+    }
+    // email@domain.com
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      this.setState({ error: "A valid Email is required" });
+      return false;
+    }
+    if (password.length >= 1 && password.length <= 5) {
+      this.setState({
+        error: "Password must be at least 6 characters long"
+      });
+      return false;
+    }
+    return true;
+  };
+
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
   clickSubmit = async event => {
     event.preventDefault();
-    const { name, email, password } = this.state;
-    const user = {
-      name,
-      email,
-      password
-    };
 
-    const userId = this.props.match.params.userId;
-    const token = isAuthenticated().token;
-    
-    const data = await updateUser(userId, token, user);
-    if (data.error) this.setState({ error: data.error });
-    else
-      this.setState({
-        redirectToProfile: true
-      });
+    if (this.isValid()) {
+      const { name, email, password } = this.state;
+      const user = {
+        name,
+        email,
+        password: password || undefined
+      };
+
+      const userId = this.props.match.params.userId;
+      const token = isAuthenticated().token;
+
+      const data = await updateUser(userId, token, user);
+      if (data.error) this.setState({ error: data.error });
+      else
+        this.setState({
+          redirectToProfile: true
+        });
+    }
   };
 
   render() {
@@ -66,6 +91,10 @@ class EditProfile extends Component {
     return (
       <div className="container">
         <h2 className="mt-5 mb-5">Edit Profile</h2>
+
+        {this.state.error && (
+          <div className="alert alert-danger">{this.state.error}</div>
+        )}
 
         <EditForm
           stateValues={this.state}
