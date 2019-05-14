@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { isAuthenticated, getUserById, updateUser } from "../../utils/Requests";
+import {
+  isAuthenticated,
+  getUserById,
+  updateUser,
+  getProfileImage
+} from "../../utils/Requests";
 import EditForm from "./_EditForm";
 import { Redirect } from "react-router-dom";
 import DefaultProfile from "../../images/avatar.jpg";
@@ -15,7 +20,7 @@ class EditProfile extends Component {
       redirectToProfile: false,
       error: "",
       fileSize: 0,
-      loading: false
+      loading: false,
     };
   }
 
@@ -77,7 +82,6 @@ class EditProfile extends Component {
     const fileSize =
       event.target.name === "photo" ? event.target.files[0].size : 0;
     this.userData.set(event.target.name, value);
-    this.setState({ [event.target.name]: value });
     this.setState({ [event.target.name]: value, fileSize });
   };
 
@@ -107,7 +111,7 @@ class EditProfile extends Component {
     }
 
     const photoUrl = id
-      ? `http://localhost:8080/user/photo/${id}?${new Date().getTime()}`
+      ? getProfileImage(id)
       : DefaultProfile;
 
     return (

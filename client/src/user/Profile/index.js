@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { isAuthenticated, getProfile } from "../../utils/Requests";
+import { isAuthenticated, getProfile, getProfileImage } from "../../utils/Requests";
 import { Redirect, Link } from "react-router-dom";
 import DefaultProfile from "../../images/avatar.jpg";
 import DeleteUser from "./DeleteProfile";
@@ -9,7 +9,7 @@ class Profile extends Component {
     super();
     this.state = {
       user: "",
-      redirectToSignin: false
+      redirectToSignin: false,
     };
   }
 
@@ -38,6 +38,10 @@ class Profile extends Component {
     if (redirectToSignin || !isAuthenticated())
       return <Redirect to="/signin" />;
 
+      const photoUrl = user._id
+      ? getProfileImage(user._id)
+      : DefaultProfile;
+
     return (
       <div className="container">
         <h2 className="mt-5 mb-5">Profile</h2>
@@ -45,13 +49,14 @@ class Profile extends Component {
           <div className="col-md-6">
             <img
               className="card-img-top"
-              src={DefaultProfile}
+              src={photoUrl}
               alt={user.name}
               style={{
                 width: "100%",
                 height: "15vw",
                 objectFit: "cover"
               }}
+              onError={i => (i.target.src = `${DefaultProfile}`)}
             />
           </div>
 
