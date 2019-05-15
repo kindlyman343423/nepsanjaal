@@ -4,7 +4,7 @@ const formidable = require("formidable");
 const fs = require("fs");
 
 exports.userById = async (req, res, next, id) => {
-  const user = await User.findById(id).select("email name created updated photo");
+  const user = await User.findById(id).select("email name created updated photo about");
 
   if (!user) {
     return res.status(400).json({
@@ -22,10 +22,8 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.getUserById = async (req, res) => {
-  console.log(req.profile._id == req.auth._id);
   req.profile.hashed_password = undefined;
   req.profile.salt = undefined;
-  console.log(req.profile);
   return res.json(req.profile);
 };
 
@@ -62,7 +60,6 @@ exports.updateUserById = async (req, res) => {
 };
 
 exports.userPhoto = (req, res, next) => {
-  console.log(req.profile)
   if (req.profile.photo.data) {
     res.set(("Content-Type", req.profile.photo.contentType));
     return res.send(req.profile.photo.data);

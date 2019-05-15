@@ -21,6 +21,7 @@ class EditProfile extends Component {
       error: "",
       fileSize: 0,
       loading: false,
+      about: ""
     };
   }
 
@@ -34,6 +35,7 @@ class EditProfile extends Component {
         id: data._id,
         name: data.name,
         email: data.email,
+        about: data.about,
         error: ""
       });
     }
@@ -59,7 +61,7 @@ class EditProfile extends Component {
       return false;
     }
     // email@domain.com
-    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+    if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       this.setState({ error: "A valid Email is required", loading: false });
       return false;
     }

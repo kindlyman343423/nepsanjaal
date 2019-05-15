@@ -2,7 +2,7 @@ import React from "react";
 
 const _EditForm = props => {
   const { stateValues, clickSubmit, handleChange } = props;
-  const { name, email, password } = stateValues;
+  const { name, email, password, about } = stateValues;
   return (
     <form>
       <div className="form-group">
@@ -33,6 +33,16 @@ const _EditForm = props => {
           name="email"
           className="form-control"
           value={email}
+        />
+      </div>
+      <div className="form-group">
+        <label className="text-muted">About</label>
+        <textarea
+          onChange={handleChange}
+          type="text"
+          name="about"
+          className="form-control"
+          value={about}
         />
       </div>
       <div className="form-group">

@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { isAuthenticated, getProfile, getProfileImage } from "../../utils/Requests";
+import {
+  isAuthenticated,
+  getProfile,
+  getProfileImage
+} from "../../utils/Requests";
 import { Redirect, Link } from "react-router-dom";
 import DefaultProfile from "../../images/avatar.jpg";
 import DeleteUser from "./DeleteProfile";
@@ -9,7 +13,7 @@ class Profile extends Component {
     super();
     this.state = {
       user: "",
-      redirectToSignin: false,
+      redirectToSignin: false
     };
   }
 
@@ -35,12 +39,11 @@ class Profile extends Component {
 
   render() {
     const { redirectToSignin, user } = this.state;
+    console.log(user.about)
     if (redirectToSignin || !isAuthenticated())
       return <Redirect to="/signin" />;
 
-      const photoUrl = user._id
-      ? getProfileImage(user._id)
-      : DefaultProfile;
+    const photoUrl = user._id ? getProfileImage(user._id) : DefaultProfile;
 
     return (
       <div className="container">
@@ -77,6 +80,13 @@ class Profile extends Component {
                 <DeleteUser userId={user._id} />
               </div>
             )}
+          </div>
+        </div>
+        <div className="row">
+          <div className="col md-12 mt-5 mb-5">
+            <hr />
+            <p className="lead">{user.about}</p>
+            <hr />
           </div>
         </div>
       </div>
