@@ -64,6 +64,17 @@ export const isAuthenticated = () => {
   }
 };
 
+export const updateUserInLocalStorage = (user, next) => {
+  if (typeof window !== "undefined") {
+      if (localStorage.getItem("jwt")) {
+          let auth = JSON.parse(localStorage.getItem("jwt"));
+          auth.user = user;
+          localStorage.setItem("jwt", JSON.stringify(auth));
+          next();
+      }
+  }
+};
+
 //User requests
 
 export const removeUser = (userId, token) => {

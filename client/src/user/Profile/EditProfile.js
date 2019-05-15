@@ -3,7 +3,8 @@ import {
   isAuthenticated,
   getUserById,
   updateUser,
-  getProfileImage
+  getProfileImage,
+  updateUserInLocalStorage
 } from "../../utils/Requests";
 import EditForm from "./_EditForm";
 import { Redirect } from "react-router-dom";
@@ -99,9 +100,11 @@ class EditProfile extends Component {
       const data = await updateUser(userId, token, this.userData);
       if (data.error) this.setState({ error: data.error, loading: false });
       else
+      updateUserInLocalStorage(data, () => {
         this.setState({
-          redirectToProfile: true
+            redirectToProfile: true
         });
+    });
     }
   };
 
