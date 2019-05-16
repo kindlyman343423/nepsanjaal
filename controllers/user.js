@@ -2,15 +2,19 @@ const User = require("../models/user");
 const _ = require("lodash");
 const formidable = require("formidable");
 const fs = require("fs");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 exports.userById = async (req, res, next, id) => {
-  const user = await User.findById(id).select("email name created updated photo about");
+  const user = await User.findById(id);
 
   if (!user) {
     return res.status(400).json({
       error: "User not found"
     });
   }
+  user.salt = undefined;
+  user.hashed_password = undefined;
+  console.log(user);
   req.profile = user; // adds profile object in req with user info
   next();
 };
@@ -71,4 +75,57 @@ exports.deleteUser = async (req, res) => {
   let user = req.profile;
   await user.remove();
   res.json({ message: "User deleted successfully" });
+};
+
+// Follow Unfollow
+exports.addFollowing = async (req, res, next) => {
+  await User.findByIdAndUpdate(req.auth._id, {
+    $push: { following: ObjectId(req.body.followId) }
+  });
+
+  next();
+};
+
+exports.addFollower = async (req, res) => {
+  const result = await User.findByIdAndUpdate(
+    req.body.followId,
+    { $push: { followers: ObjectId(req.auth._id) } },
+    { new: true }
+  )
+    .populate("following", "name")
+    .populate("followers", "name");
+
+  result.hashed_password = undefined;
+  result.salt = undefined;
+  result.photo = undefined;
+  res.json(result);
+};
+
+// remove follow unfollow
+exports.removeFollowing = (req, res, next) => {
+  User.findByIdAndUpdate(
+    req.auth._id,
+    { $pull: { following: ObjectId(req.body.unfollowId) } },
+    (err, result) => {
+      if (err) {
+        return res.status(400).json({ error: err });
+      }
+      next();
+    }
+  );
+};
+
+exports.removeFollower = async (req, res) => {
+  const result = await User.findByIdAndUpdate(
+    req.body.unfollowId,
+    { $pull: { followers: ObjectId(req.auth._id) } },
+    { new: true }
+  )
+    .populate("following", "name")
+    .populate("followers", "name");
+
+  result.hashed_password = undefined;
+  result.salt = undefined;
+  result.photo = undefined;
+  res.json(result);
 };

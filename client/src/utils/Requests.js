@@ -151,5 +151,5 @@ export const updateUser = (userId, token, user) => {
 };
 
 export const getProfileImage = id => {
-  return `http://localhost:8080/user/photo/${id}?${new Date().getTime()}`;
+  return `${base_url}/user/photo/${id}?${new Date().getTime()}`;
 };
