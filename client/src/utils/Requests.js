@@ -150,6 +150,22 @@ export const updateUser = (userId, token, user) => {
     .catch(err => console.log(err));
 };
 
+export const follow = (token, followId) => {
+  return fetch(`${base_url}/user/follow`, {
+      method: "PUT",
+      headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({followId })
+  })
+      .then(response => {
+          return response.json();
+      })
+      .catch(err => console.log(err));
+};
+
 export const getProfileImage = id => {
   return `${base_url}/user/photo/${id}?${new Date().getTime()}`;
 };
