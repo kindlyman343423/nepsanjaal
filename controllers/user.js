@@ -5,7 +5,9 @@ const fs = require("fs");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 exports.userById = async (req, res, next, id) => {
-  const user = await User.findById(id).populate("following", "name").populate("followers", "name")
+  const user = await User.findById(id)
+    .populate("following", "name")
+    .populate("followers", "name");
 
   if (!user) {
     return res.status(400).json({
@@ -128,4 +130,13 @@ exports.removeFollower = async (req, res) => {
   result.salt = undefined;
   result.photo = undefined;
   res.json(result);
+};
+
+exports.findPeople = async (req, res) => {
+  let { following } = req.profile;
+  following.push(req.profile._id);
+
+  foundusers = await User.find({ _id: { $nin: following } }).select("name");
+
+  res.json(foundusers);
 };
