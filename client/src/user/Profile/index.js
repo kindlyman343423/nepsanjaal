@@ -46,7 +46,7 @@ class Profile extends Component {
     const jwt = isAuthenticated();
     const match = user.followers.find(follower => {
       // one id has many other ids (followers) and vice versa
-      return follower._id === jwt.user._id;
+      return follower === jwt.user._id;
     });
     return match;
   };

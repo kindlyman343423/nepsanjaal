@@ -66,12 +66,12 @@ export const isAuthenticated = () => {
 
 export const updateUserInLocalStorage = (user, next) => {
   if (typeof window !== "undefined") {
-      if (localStorage.getItem("jwt")) {
-          let auth = JSON.parse(localStorage.getItem("jwt"));
-          auth.user = user;
-          localStorage.setItem("jwt", JSON.stringify(auth));
-          next();
-      }
+    if (localStorage.getItem("jwt")) {
+      let auth = JSON.parse(localStorage.getItem("jwt"));
+      auth.user = user;
+      localStorage.setItem("jwt", JSON.stringify(auth));
+      next();
+    }
   }
 };
 
@@ -152,18 +152,34 @@ export const updateUser = (userId, token, user) => {
 
 export const follow = (token, followId) => {
   return fetch(`${base_url}/user/follow`, {
-      method: "PUT",
-      headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({followId })
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ followId })
   })
-      .then(response => {
-          return response.json();
-      })
-      .catch(err => console.log(err));
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
+export const unfollow = (token, unfollowId) => {
+  return fetch(`${base_url}/user/unfollow`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ unfollowId })
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
 };
 
 export const getProfileImage = id => {
