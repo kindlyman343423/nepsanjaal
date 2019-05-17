@@ -185,3 +185,18 @@ export const unfollow = (token, unfollowId) => {
 export const getProfileImage = id => {
   return `${base_url}/user/photo/${id}?${new Date().getTime()}`;
 };
+
+export const findPeople = (userId, token) => {
+  return fetch(`${base_url}/user/findpeople/${userId}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
