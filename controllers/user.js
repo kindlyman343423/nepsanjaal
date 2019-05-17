@@ -5,7 +5,7 @@ const fs = require("fs");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 exports.userById = async (req, res, next, id) => {
-  const user = await User.findById(id);
+  const user = await User.findById(id).populate("following", "name").populate("followers", "name")
 
   if (!user) {
     return res.status(400).json({

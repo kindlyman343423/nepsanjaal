@@ -8,6 +8,7 @@ import { Redirect, Link } from "react-router-dom";
 import DefaultProfile from "../../images/avatar.jpg";
 import DeleteUser from "./DeleteProfile";
 import FollowProfileButton from "./FollowProfileButton";
+import ProfileTabs from "./ProfileTabs";
 
 class Profile extends Component {
   constructor() {
@@ -46,7 +47,7 @@ class Profile extends Component {
     const jwt = isAuthenticated();
     const match = user.followers.find(follower => {
       // one id has many other ids (followers) and vice versa
-      return follower === jwt.user._id;
+      return follower._id === jwt.user._id;
     });
     return match;
   };
@@ -118,6 +119,10 @@ class Profile extends Component {
             <hr />
             <p className="lead">{user.about}</p>
             <hr />
+            <ProfileTabs
+              followers={user.followers}
+              following={user.following}
+            />
           </div>
         </div>
       </div>
