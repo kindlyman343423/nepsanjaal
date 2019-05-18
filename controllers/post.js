@@ -17,9 +17,10 @@ exports.postById = async (req, res, next, id) => {
 exports.getPosts = async (req, res) => {
   const posts = await Post.find()
     .populate("postedBy", "name")
-    .select("_id title body");
+    .select("_id title body created")
+    .sort({ created: -1 });
 
-  res.json({ posts });
+  res.json(posts);
 };
 
 exports.createPost = (req, res, next) => {
@@ -52,9 +53,9 @@ exports.postByUser = async (req, res) => {
   res.json({ posts });
 };
 
-exports.getPostByPostId = async (req, res) =>{
+exports.getPostByPostId = async (req, res) => {
   res.json(req.post);
-}
+};
 
 exports.updatePostById = async (req, res) => {
   let post = req.post;

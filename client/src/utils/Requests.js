@@ -200,3 +200,19 @@ export const findPeople = (userId, token) => {
     })
     .catch(err => console.log(err));
 };
+
+// Posts requests
+export const createPost = (token, post) => {
+  return fetch(`${base_url}/post`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: post
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
