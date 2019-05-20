@@ -266,3 +266,18 @@ export const removePost = (postId, token) => {
     })
     .catch(err => console.log(err));
 };
+
+export const updatePost = (postId, token, post) => {
+  return fetch(`${base_url}/post/${postId}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: post
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
