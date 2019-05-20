@@ -6,7 +6,8 @@ const {
   postById,
   getPostByPostId,
   deletePostById,
-  updatePostById
+  updatePostById,
+  photo
 } = require("../controllers/post");
 const { requireSignin, isPoster } = require("../controllers/auth");
 const { userById } = require("../controllers/user");
@@ -20,6 +21,9 @@ router.get("/posts/by/:userId", requireSignin, postByUser);
 router.get("/post/:postId", getPostByPostId);
 router.put("/post/:postId", requireSignin, isPoster, updatePostById);
 router.delete("/post/:postId", requireSignin, isPoster, deletePostById);
+
+// photo
+router.get("/post/photo/:postId", photo);
 
 // any route containing :userId, our app will first execute userByID()
 router.param("userId", userById);

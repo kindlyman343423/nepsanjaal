@@ -92,3 +92,8 @@ exports.deletePostById = async (req, res) => {
   await post.remove();
   res.json({ message: "Post deleted successfully" });
 };
+
+exports.photo = (req, res, next) => {
+  res.set("Content-Type", req.post.photo.contentType);
+  return res.send(req.post.photo.data);
+};
