@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import { getPostById, isAuthenticated } from "../utils/Requests";
+import { getPostById, isAuthenticated, removePost } from "../utils/Requests";
 import DefaultPost from "../images/mountains.jpg";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import appconstants from "../utils/Constants";
 
 class SinglePost extends Component {
   state = {
-    post: ""
+    post: "",
+    redirectToHome: false
   };
 
   componentDidMount = () => {
@@ -18,6 +19,21 @@ class SinglePost extends Component {
         this.setState({ post: data });
       }
     });
+  };
+
+  handledeletePost = () => {
+    let answer = window.confirm("Are you sure you want to delete this post?");
+    if (answer) {
+      const postId = this.props.match.params.postId;
+      const token = isAuthenticated().token;
+      removePost(postId, token).then(data => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          this.setState({ redirectToHome: true });
+        }
+      });
+    }
   };
 
   renderPost = post => {
@@ -55,7 +71,10 @@ class SinglePost extends Component {
                 <button className="btn btn-raised btn-warning mr-5">
                   Update Post
                 </button>
-                <button className="btn btn-raised btn-danger">
+                <button
+                  onClick={this.handledeletePost}
+                  className="btn btn-raised btn-danger"
+                >
                   Delete Post
                 </button>
               </>
@@ -66,6 +85,9 @@ class SinglePost extends Component {
   };
 
   render() {
+    if (this.state.redirectToHome) {
+      return <Redirect to={`/`} />;
+    }
     const { post } = this.state;
     return (
       <div className="container">
