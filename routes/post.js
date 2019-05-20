@@ -17,7 +17,7 @@ const router = express.Router();
 router.get("/posts", getPosts);
 router.post("/post", requireSignin, createPost, createPostValidator);
 router.get("/posts/by/:userId", requireSignin, postByUser);
-router.get("/post/:postId", requireSignin, getPostByPostId);
+router.get("/post/:postId", getPostByPostId);
 router.put("/post/:postId", requireSignin, isPoster, updatePostById);
 router.delete("/post/:postId", requireSignin, isPoster, deletePostById);
 
