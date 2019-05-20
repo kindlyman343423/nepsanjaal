@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { getPostById } from "../utils/Requests";
+import { getPostById, isAuthenticated } from "../utils/Requests";
 import DefaultPost from "../images/mountains.jpg";
 import { Link } from "react-router-dom";
-import appconstants from '../utils/Constants';
+import appconstants from "../utils/Constants";
 
 class SinglePost extends Component {
   state = {
@@ -44,9 +44,23 @@ class SinglePost extends Component {
           Posted by <Link to={`${posterId}`}>{posterName} </Link>
           on {new Date(post.created).toDateString()}
         </p>
-        <Link to={`/`} className="btn btn-raised btn-primary btn-sm">
-          Back to posts
-        </Link>
+        <div className="d-inline-block">
+          <Link to={`/`} className="btn btn-raised btn-primary btn-sm mr-5">
+            Back to posts
+          </Link>
+
+          {isAuthenticated().user &&
+            isAuthenticated().user._id === post.postedBy._id && (
+              <>
+                <button className="btn btn-raised btn-warning mr-5">
+                  Update Post
+                </button>
+                <button className="btn btn-raised btn-danger">
+                  Delete Post
+                </button>
+              </>
+            )}
+        </div>
       </div>
     );
   };

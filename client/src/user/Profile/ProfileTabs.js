@@ -72,18 +72,6 @@ class ProfileTabs extends Component {
               <div key={i}>
                 <div>
                   <Link to={`/post/${post._id}`}>
-                    <img
-                      style={{
-                        borderRadius: "50%",
-                        border: "1px solid black"
-                      }}
-                      className="float-left mr-2"
-                      height="30px"
-                      width="30px"
-                      onError={i => (i.target.src = `${DefaultPostImage}`)}
-                      src={`${appconstants.base_url}/user/photo/${post._id}`}
-                      alt={post.title}
-                    />
                     <div>
                       <p className="lead">{post.title}</p>
                     </div>
