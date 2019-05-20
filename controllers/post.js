@@ -50,7 +50,7 @@ exports.postByUser = async (req, res) => {
   const posts = await Post.find({ postedBy: req.profile._id })
     .populate("postedBy", "name")
     .sort({ created: -1 });
-  res.json({ posts });
+  res.json(posts);
 };
 
 exports.getPostByPostId = async (req, res) => {

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { getPostById } from "../utils/Requests";
 import DefaultPost from "../images/mountains.jpg";
 import { Link } from "react-router-dom";
-import base_url from '../utils/Constants';
+import appconstants from '../utils/Constants';
 
 class SinglePost extends Component {
   state = {
@@ -27,7 +27,7 @@ class SinglePost extends Component {
     return (
       <div className="card-body">
         <img
-          src={`${base_url}/post/photo/${post._id}`}
+          src={`${appconstants.base_url}/post/photo/${post._id}`}
           alt={post.title}
           onError={i => (i.target.src = `${DefaultPost}`)}
           className="img-thunbnail mb-3"

@@ -16,7 +16,6 @@ exports.userById = async (req, res, next, id) => {
   }
   user.salt = undefined;
   user.hashed_password = undefined;
-  console.log(user);
   req.profile = user; // adds profile object in req with user info
   next();
 };

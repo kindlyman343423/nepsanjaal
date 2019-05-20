@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import {
   isAuthenticated,
   getProfile,
-  getProfileImage
+  getProfileImage,
+  getPostByUser
 } from "../../utils/Requests";
 import { Redirect, Link } from "react-router-dom";
 import DefaultProfile from "../../images/avatar.jpg";
@@ -17,7 +18,8 @@ class Profile extends Component {
       user: { following: [], followers: [] },
       redirectToSignin: false,
       following: false,
-      error: ""
+      error: "",
+      posts: []
     };
   }
 
@@ -29,7 +31,19 @@ class Profile extends Component {
     } else {
       let following = this.checkFollow(data);
       this.setState({ user: data, following });
+      this.loadPosts(data._id);
     }
+  };
+
+  loadPosts = userId => {
+    const token = isAuthenticated().token;
+    getPostByUser(userId, token).then(data => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        this.setState({ posts: data });
+      }
+    });
   };
 
   componentDidMount() {
@@ -65,7 +79,7 @@ class Profile extends Component {
   };
 
   render() {
-    const { redirectToSignin, user } = this.state;
+    const { redirectToSignin, user, posts } = this.state;
     if (redirectToSignin || !isAuthenticated())
       return <Redirect to="/signin" />;
 
@@ -122,6 +136,7 @@ class Profile extends Component {
             <ProfileTabs
               followers={user.followers}
               following={user.following}
+              posts={posts}
             />
           </div>
         </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import DefaultPost from "../images/mountains.jpg";
-import base_url  from "../utils/Constants";
+import appconstants  from "../utils/Constants";
 
 const RenderPosts = ({ posts }) => {
   return (
@@ -14,7 +14,7 @@ const RenderPosts = ({ posts }) => {
           <div className="card col-md-4" key={i}>
             <div className="card-body">
               <img
-                src={`${base_url}/post/photo/${post._id}`}
+                src={`${appconstants.base_url}/post/photo/${post._id}`}
                 alt={post.title}
                 onError={i => (i.target.src = `${DefaultPost}`)}
                 className="img-thunbnail mb-3"

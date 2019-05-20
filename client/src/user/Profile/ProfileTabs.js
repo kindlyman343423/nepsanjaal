@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import DefaultProfile from "../../images/avatar.jpg";
+import DefaultPostImage from "../../images/mountains.jpg";
 import appconstants from "../../utils/Constants";
 
 class ProfileTabs extends Component {
   render() {
-    const { following, followers } = this.props;
-
+    const { following, followers, posts } = this.props;
     return (
       <div>
         <div className="row">
@@ -16,7 +15,7 @@ class ProfileTabs extends Component {
             {followers.map((person, i) => (
               <div key={i}>
                 <div>
-                  <Link to={`/user/${person._id}`}>
+                  <Link to={`/post/${person._id}`}>
                     <img
                       style={{
                         borderRadius: "50%",
@@ -25,7 +24,7 @@ class ProfileTabs extends Component {
                       className="float-left mr-2"
                       height="30px"
                       width="30px"
-                      onError={i => (i.target.src = `${DefaultProfile}`)}
+                      onError={i => (i.target.src = `${DefaultPostImage}`)}
                       src={`${appconstants.base_url}/user/photo/${person._id}`}
                       alt={person.name}
                     />
@@ -53,7 +52,7 @@ class ProfileTabs extends Component {
                       className="float-left mr-2"
                       height="30px"
                       width="30px"
-                      onError={i => (i.target.src = `${DefaultProfile}`)}
+                      onError={i => (i.target.src = `${DefaultPostImage}`)}
                       src={`${appconstants.base_url}/user/photo/${person._id}`}
                       alt={person.name}
                     />
@@ -69,6 +68,29 @@ class ProfileTabs extends Component {
           <div className="col-md-4">
             <h3 className="text-primary">Posts</h3>
             <hr />
+            {posts.map((post, i) => (
+              <div key={i}>
+                <div>
+                  <Link to={`/post/${post._id}`}>
+                    <img
+                      style={{
+                        borderRadius: "50%",
+                        border: "1px solid black"
+                      }}
+                      className="float-left mr-2"
+                      height="30px"
+                      width="30px"
+                      onError={i => (i.target.src = `${DefaultPostImage}`)}
+                      src={`${appconstants.base_url}/user/photo/${post._id}`}
+                      alt={post.title}
+                    />
+                    <div>
+                      <p className="lead">{post.title}</p>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
