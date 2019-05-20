@@ -105,24 +105,24 @@ class EditPost extends Component {
             <h2>Loading...</h2>
           </div>
         ) : (
-          ""
+          <>
+            <img
+              style={{ height: "200px", width: "auto" }}
+              className="img-thumbnail"
+              src={`${
+                appconstants.base_url
+              }/post/photo/${id}?${new Date().getTime()}`}
+              onError={i => (i.target.src = `${DefaultPost}`)}
+              alt={title}
+            />
+            <EditForm
+              title={title}
+              body={body}
+              handleChange={this.handleChange}
+              clickSubmit={this.clickSubmit}
+            />
+          </>
         )}
-
-        <img
-          style={{ height: "200px", width: "auto" }}
-          className="img-thumbnail"
-          src={`${
-            appconstants.base_url
-          }/post/photo/${id}?${new Date().getTime()}`}
-          onError={i => (i.target.src = `${DefaultPost}`)}
-          alt={title}
-        />
-        <EditForm
-          title={title}
-          body={body}
-          handleChange={this.handleChange}
-          clickSubmit={this.clickSubmit}
-        />
       </div>
     );
   }

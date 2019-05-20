@@ -43,7 +43,7 @@ class SinglePost extends Component {
     return (
       <div className="card-body">
         <img
-          src={`${appconstants.base_url}/post/photo/${post._id}`}
+          src={`${appconstants.base_url}/post/photo/${post._id}?${new Date().getTime()}`}
           alt={post.title}
           onError={i => (i.target.src = `${DefaultPost}`)}
           className="img-thunbnail mb-3"
