@@ -226,3 +226,13 @@ export const postList = () => {
     })
     .catch(err => console.log(err));
 };
+
+export const getPostById = postId => {
+  return fetch(`${base_url}/post/${postId}`, {
+    method: "GET"
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};

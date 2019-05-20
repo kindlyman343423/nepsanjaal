@@ -28,7 +28,7 @@ const RenderPosts = ({ posts }) => {
                 on {new Date(post.created).toDateString()}
               </p>
               <Link
-                to={`/posts/${post._id}`}
+                to={`/post/${post._id}`}
                 className="btn btn-raised btn-primary btn-sm"
               >
                 Read more
