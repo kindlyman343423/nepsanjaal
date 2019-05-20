@@ -216,3 +216,13 @@ export const createPost = (token, post) => {
     })
     .catch(err => console.log(err));
 };
+
+export const postList = () => {
+  return fetch(`${base_url}/posts`, {
+    method: "GET"
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
