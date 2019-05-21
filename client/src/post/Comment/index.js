@@ -50,11 +50,27 @@ class Comment extends Component {
     }
   };
 
+  deleteComment = comment => {
+    let answer = window.confirm(
+      "Are you sure you want to delete your comment?"
+    );
+    if (answer) {
+      const token = isAuthenticated().token;
+      const postId = this.props.postId;
+
+      uncomment(token, postId, comment).then(data => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          this.props.updateComments(data.comments);
+        }
+      });
+    }
+  };
+
   render() {
     const { comments } = this.props;
     const { error } = this.state;
-
-    console.log(comments)
 
     return (
       <div>
@@ -110,6 +126,20 @@ class Comment extends Component {
                       {comment.postedBy.name}{" "}
                     </Link>
                     on {new Date(comment.created).toDateString()}
+                    <span>
+                      {isAuthenticated().user &&
+                        isAuthenticated().user._id === comment.postedBy._id && (
+                          <>
+                            <span
+                              onClick={() => this.deleteComment(comment)}
+                              className="text-danger float-right mr-1"
+                              style={{ cursor: "pointer" }}
+                            >
+                              Remove
+                            </span>
+                          </>
+                        )}
+                    </span>
                   </p>
                 </div>
               </div>
