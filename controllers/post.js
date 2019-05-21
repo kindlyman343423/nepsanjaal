@@ -17,7 +17,7 @@ exports.postById = async (req, res, next, id) => {
 exports.getPosts = async (req, res) => {
   const posts = await Post.find()
     .populate("postedBy", "name")
-    .select("_id title body created")
+    .select("title body created likes")
     .sort({ created: -1 });
 
   res.json(posts);
@@ -48,8 +48,10 @@ exports.createPost = (req, res, next) => {
 
 exports.postByUser = async (req, res) => {
   const posts = await Post.find({ postedBy: req.profile._id })
+    .select("title body created likes")
     .populate("postedBy", "name")
     .sort({ created: -1 });
+
   res.json(posts);
 };
 
@@ -96,4 +98,24 @@ exports.deletePostById = async (req, res) => {
 exports.photo = (req, res, next) => {
   res.set("Content-Type", req.post.photo.contentType);
   return res.send(req.post.photo.data);
+};
+
+exports.like = async (req, res) => {
+  const result = await Post.findByIdAndUpdate(
+    req.body.postId,
+    { $push: { likes: req.auth._id } },
+    { new: true }
+  );
+  result.photo = undefined;
+  res.json(result);
+};
+
+exports.unlike = async (req, res) => {
+  const result = await Post.findByIdAndUpdate(
+    req.body.postId,
+    { $pull: { likes: req.auth._id } },
+    { new: true }
+  );
+  result.photo = undefined;
+  res.json(result);
 };

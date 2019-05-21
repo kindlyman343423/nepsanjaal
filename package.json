@@ -4,9 +4,10 @@
   "description": "A MERN stack social networking app",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js",
-    "server": "nodemon app",
-    "client": "cd client && yarn start"
+   "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [
     "node",
