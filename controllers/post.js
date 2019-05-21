@@ -4,7 +4,9 @@ const fs = require("fs");
 const _ = require("lodash");
 
 exports.postById = async (req, res, next, id) => {
-  const post = await Post.findById(id).populate("postedBy", "name");
+  const post = await Post.findById(id)
+    .populate("postedBy", "name")
+    .populate("comments.postedBy", "name");
   if (!post) {
     return res.status(400).json({
       error: "Post not found"
@@ -17,6 +19,7 @@ exports.postById = async (req, res, next, id) => {
 exports.getPosts = async (req, res) => {
   const posts = await Post.find()
     .populate("postedBy", "name")
+    .populate("comments.postedBy", "name")
     .select("title body created likes comments")
     .sort({ created: -1 });
 
