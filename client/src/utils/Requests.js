@@ -314,3 +314,35 @@ export const unlike = (token, postId) => {
     })
     .catch(err => console.log(err));
 };
+
+export const comment = (token, postId, comment) => {
+  return fetch(`${base_url}/post/comment`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ postId, comment })
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
+export const uncomment = (token, postId, comment) => {
+  return fetch(`${base_url}/post/uncomment`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ postId, comment })
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
