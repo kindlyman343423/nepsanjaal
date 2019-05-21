@@ -17,7 +17,7 @@ exports.postById = async (req, res, next, id) => {
 exports.getPosts = async (req, res) => {
   const posts = await Post.find()
     .populate("postedBy", "name")
-    .select("title body created likes")
+    .select("title body created likes comments")
     .sort({ created: -1 });
 
   res.json(posts);
@@ -117,5 +117,38 @@ exports.unlike = async (req, res) => {
     { new: true }
   );
   result.photo = undefined;
+  res.json(result);
+};
+
+exports.comment = async (req, res) => {
+  let comment = req.body.comment;
+  comment.postedBy = req.auth._id;
+
+  const result = await Post.findByIdAndUpdate(
+    req.body.postId,
+    { $push: { comments: comment } },
+    { new: true }
+  )
+    .populate("comments.postedBy", "name")
+    .populate("postedBy", "name");
+
+  result.photo = undefined;
+
+  res.json(result);
+};
+
+exports.uncomment = async (req, res) => {
+  let comment = req.body.comment;
+
+  const result = await Post.findByIdAndUpdate(
+    req.body.postId,
+    { $pull: { comments: { _id: comment._id } } },
+    { new: true }
+  )
+    .populate("comments.postedBy", "name")
+    .populate("postedBy", "name");
+
+  result.photo = undefined;
+
   res.json(result);
 };
