@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { getPostById, isAuthenticated, removePost } from "../utils/Requests";
+import {
+  getPostById,
+  isAuthenticated,
+  removePost,
+  like,
+  unlike
+} from "../utils/Requests";
 import DefaultPost from "../images/mountains.jpg";
 import { Link, Redirect } from "react-router-dom";
 import appconstants from "../utils/Constants";
@@ -7,7 +13,10 @@ import appconstants from "../utils/Constants";
 class SinglePost extends Component {
   state = {
     post: "",
-    redirectToHome: false
+    redirectToHome: false,
+    redirectToSignin: false,
+    liked: false,
+    likes: 0
   };
 
   componentDidMount = () => {
@@ -16,7 +25,38 @@ class SinglePost extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-        this.setState({ post: data });
+        this.setState({
+          post: data,
+          likes: data.likes.length,
+          liked: this.checkLike(data.likes)
+        });
+      }
+    });
+  };
+
+  checkLike = likes => {
+    const userId = isAuthenticated() && isAuthenticated().user._id;
+    let match = likes.indexOf(userId) !== -1;
+    return match;
+  };
+
+  likeToggle = () => {
+    if (!isAuthenticated()) {
+      this.setState({ redirectToSignin: true });
+      return false;
+    }
+    let callApi = this.state.liked ? unlike : like;
+    const postId = this.state.post._id;
+    const token = isAuthenticated().token;
+
+    callApi(token, postId).then(data => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        this.setState({
+          liked: !this.state.liked,
+          likes: data.likes.length
+        });
       }
     });
   };
@@ -40,10 +80,14 @@ class SinglePost extends Component {
     const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
     const posterName = post.postedBy ? post.postedBy.name : " Unknown";
 
+    const { likes, liked } = this.state;
+
     return (
       <div className="card-body">
         <img
-          src={`${appconstants.base_url}/post/photo/${post._id}?${new Date().getTime()}`}
+          src={`${appconstants.base_url}/post/photo/${
+            post._id
+          }?${new Date().getTime()}`}
           alt={post.title}
           onError={i => (i.target.src = `${DefaultPost}`)}
           className="img-thunbnail mb-3"
@@ -56,6 +100,31 @@ class SinglePost extends Component {
 
         <p className="card-text">{post.body}</p>
         <br />
+        {liked ? (
+          <h3 onClick={this.likeToggle}>
+            <i
+              className="fa fa-thumbs-up text-success bg-dark"
+              style={{
+                padding: "10px",
+                borderRadius: "50%",
+                cursor: "pointer"
+              }}
+            />{" "}
+            {likes} Like
+          </h3>
+        ) : (
+          <h3 onClick={this.likeToggle}>
+            <i
+              className="fa fa-thumbs-up text-warning bg-dark"
+              style={{
+                padding: "10px",
+                borderRadius: "50%",
+                cursor: "pointer"
+              }}
+            />{" "}
+            {likes} Like
+          </h3>
+        )}
         <p className="font-italic mark">
           Posted by <Link to={`${posterId}`}>{posterName} </Link>
           on {new Date(post.created).toDateString()}
@@ -89,10 +158,14 @@ class SinglePost extends Component {
   };
 
   render() {
-    if (this.state.redirectToHome) {
+    const { post, redirectToHome, redirectToSignin } = this.state;
+
+    if (redirectToHome) {
       return <Redirect to={`/`} />;
+    } else if (redirectToSignin) {
+      return <Redirect to={`/signin`} />;
     }
-    const { post } = this.state;
+
     return (
       <div className="container">
         <h2 className="display-2 mt-5 mb-5">{post.title}</h2>
