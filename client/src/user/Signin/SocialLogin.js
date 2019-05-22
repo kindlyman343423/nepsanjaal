@@ -12,7 +12,6 @@ class SocialLogin extends Component {
   }
 
   responseGoogle = response => {
-    console.log(response);
     const { googleId, name, email, imageUrl } = response.profileObj;
     const user = {
       password: googleId,

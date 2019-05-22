@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import SigninForm from "./SigninForm";
 
 import { signin, authenticate } from "../../utils/Requests";
@@ -66,11 +66,19 @@ class Signin extends Component {
             <h2>Loading...</h2>
           </div>
         ) : (
-          <SigninForm
-            stateValues={this.state}
-            handleChange={this.handleChange}
-            clickSubmit={this.clickSubmit}
-          />
+          <>
+            <SigninForm
+              stateValues={this.state}
+              handleChange={this.handleChange}
+              clickSubmit={this.clickSubmit}
+            />
+            <p>
+              <Link to="/forgot-password" className="btn btn-raised btn-danger">
+                {" "}
+                Forgot Password
+              </Link>
+            </p>
+          </>
         )}
       </div>
     );

@@ -4,7 +4,7 @@
   "description": "A MERN stack social networking app",
   "main": "app.js",
   "scripts": {
-   "start": "node server.js",
+    "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
@@ -31,7 +31,7 @@
     "mongoose": "^5.4.3",
     "mongoose-mongodb-errors": "0.0.2",
     "morgan": "^1.9.1",
-    "nodemailer": "^5.1.1",
+    "nodemailer": "^6.1.1",
     "nodemon": "^1.18.9",
     "uuid": "^3.3.2"
   }
