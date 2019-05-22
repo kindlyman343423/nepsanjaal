@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const _ = require("lodash");
 
 exports.signup = async (req, res) => {
   const userExists = await User.findOne({ email: req.body.email });
@@ -68,12 +69,15 @@ function parseToken(token) {
     //   jwt.verify(token.split(";")[1].split("=")[1], process.env.JWT_SECRET)
     return jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
   } catch (err) {
-    return Error({error: err.message});
+    return Error({ error: err.message });
   }
 }
 
 exports.hasAuthorization = (req, res, next) => {
-  const authorized = req.profile && req.auth && req.profile._id.toString() === req.auth._id.toString();
+  const authorized =
+    req.profile &&
+    req.auth &&
+    req.profile._id.toString() === req.auth._id.toString();
   if (!authorized) {
     return res.status(403).json({
       error: "User is not authorized to perform this action"
@@ -94,4 +98,39 @@ exports.isPoster = (req, res, next) => {
     });
   }
   next();
+};
+
+exports.socialLogin = async (req, res) => {
+  // try signup by finding user with req.email
+  let user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    // create a new user and login
+    user = new User(req.body);
+    req.profile = user;
+    user.save();
+    // generate a token with user id and secret
+    const token = jwt.sign(
+      { _id: user._id, iss: "NODEAPI" },
+      process.env.JWT_SECRET
+    );
+    res.cookie("t", token, { expire: new Date() + 9999 });
+    // return response with user and token to frontend client
+    const { _id, name, email } = user;
+    return res.json({ token, user: { _id, name, email } });
+  } else {
+    // update existing user with new social info and login
+    req.profile = user;
+    user = _.extend(user, req.body);
+    user.updated = Date.now();
+    user.save();
+    // generate a token with user id and secret
+    const token = jwt.sign(
+      { _id: user._id, iss: "NODEAPI" },
+      process.env.JWT_SECRET
+    );
+    res.cookie("t", token, { expire: new Date() + 9999 });
+    // return response with user and token to frontend client
+    const { _id, name, email } = user;
+    return res.json({ token, user: { _id, name, email } });
+  }
 };
