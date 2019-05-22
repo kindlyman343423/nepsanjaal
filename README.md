@@ -1,6 +1,6 @@
 # Nepsanjaal
 
-Nepsanjaal is an social networking site where user can follow other people and add their posts and stuff.
+Nepsanjaal is a social networking site where user can follow other people and add their posts and stuff.
 
 This application is built on MERN stack by UJJAL ACHARYA
 
