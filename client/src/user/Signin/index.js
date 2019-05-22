@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import SigninForm from "./SigninForm";
 
 import { signin, authenticate } from "../../utils/Requests";
+import SocialLogin from "./SocialLogin";
 
 class Signin extends Component {
   constructor() {
@@ -51,6 +52,12 @@ class Signin extends Component {
     return (
       <div className="container">
         <h2 className="mt-5 mb-5">SignIn</h2>
+        <hr />
+        <SocialLogin />
+
+        <hr />
+        <br />
+        <br />
 
         {error && <div className="alert alert-danger">{error}</div>}
 
@@ -58,13 +65,13 @@ class Signin extends Component {
           <div className="jumbotron text-center">
             <h2>Loading...</h2>
           </div>
-        ) : 
-        <SigninForm
-          stateValues={this.state}
-          handleChange={this.handleChange}
-          clickSubmit={this.clickSubmit}
-        />
-        }
+        ) : (
+          <SigninForm
+            stateValues={this.state}
+            handleChange={this.handleChange}
+            clickSubmit={this.clickSubmit}
+          />
+        )}
       </div>
     );
   }
