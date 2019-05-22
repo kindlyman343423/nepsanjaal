@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import GoogleLogin from "react-google-login";
-// import { authenticate } from "../../utils/Requests";
+import { authenticate, socialLogin } from "../../utils/Requests";
 
 class SocialLogin extends Component {
   constructor() {
@@ -13,6 +13,22 @@ class SocialLogin extends Component {
 
   responseGoogle = response => {
     console.log(response);
+    const { googleId, name, email, imageUrl } = response.profileObj;
+    const user = {
+      password: googleId,
+      name: name,
+      email: email,
+      imageUrl: imageUrl
+    };
+    socialLogin(user).then(data => {
+      if (data.error) {
+        console.log("Error Login. Please try again..");
+      } else {
+        authenticate(data, () => {
+          this.setState({ redirectToReferrer: true });
+        });
+      }
+    });
   };
 
   render() {

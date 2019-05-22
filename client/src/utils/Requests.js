@@ -346,3 +346,19 @@ export const uncomment = (token, postId, comment) => {
     })
     .catch(err => console.log(err));
 };
+
+export const socialLogin = user => {
+  return fetch(`${base_url}/social-login/`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(user)
+  })
+    .then(response => {
+      console.log("signin response: ", response);
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
