@@ -30,6 +30,7 @@ class ResetPassword extends Component {
   };
 
   render() {
+   console.log(this.state)
     return (
       <div className="container">
         <h2 className="mt-5 mb-5">Reset your Password</h2>
@@ -39,7 +40,7 @@ class ResetPassword extends Component {
         )}
         {this.state.error && <h4 className="bg-warning">{this.state.error}</h4>}
 
-        <form>
+        <form style={{ display: this.state.message.length ? "none" : "" }}>
           <div className="form-group mt-5">
             <input
               type="password"
