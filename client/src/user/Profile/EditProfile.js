@@ -66,7 +66,7 @@ class EditProfile extends Component {
       this.setState({ error: "A valid Email is required", loading: false });
       return false;
     }
-    if (password.length >= 1 && password.length <= 5) {
+    if (password.length >= 0 && password.length <= 5) {
       this.setState({
         error: "Password must be at least 6 characters long",
         loading: false
