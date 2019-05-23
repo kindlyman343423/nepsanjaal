@@ -11,13 +11,46 @@ class Signup extends Component {
       email: "",
       password: "",
       error: "",
-      open: false
+      open: false,
+      recaptcha: false
     };
   }
 
   handleChange = event => {
     this.setState({ error: "", open: false });
     this.setState({ [event.target.name]: event.target.value });
+  };
+
+  recaptchaHandler = e => {
+    this.setState({ error: "" });
+    let userDay = e.target.value.toLowerCase();
+    let dayCount;
+
+    if (userDay === "sunday") {
+      dayCount = 0;
+    } else if (userDay === "monday") {
+      dayCount = 1;
+    } else if (userDay === "tuesday") {
+      dayCount = 2;
+    } else if (userDay === "wednesday") {
+      dayCount = 3;
+    } else if (userDay === "thursday") {
+      dayCount = 4;
+    } else if (userDay === "friday") {
+      dayCount = 5;
+    } else if (userDay === "saturday") {
+      dayCount = 6;
+    }
+
+    if (dayCount === new Date().getDay()) {
+      this.setState({ recaptcha: true });
+      return true;
+    } else {
+      this.setState({
+        recaptcha: false
+      });
+      return false;
+    }
   };
 
   clickSubmit = async event => {
@@ -29,16 +62,22 @@ class Signup extends Component {
       password
     };
 
-    const data = await signup(user);
-    if (data.error) this.setState({ error: data.error });
-    else
+    if (this.state.recaptcha) {
+      const data = await signup(user);
+      if (data.error) this.setState({ error: data.error });
+      else
+        this.setState({
+          error: "",
+          name: "",
+          email: "",
+          password: "",
+          open: true
+        });
+    } else {
       this.setState({
-        error: "",
-        name: "",
-        email: "",
-        password: "",
-        open: true
+        error: "What day is today? Please write a correct answer!"
       });
+    }
   };
 
   render() {
@@ -59,6 +98,7 @@ class Signup extends Component {
           stateValues={this.state}
           handleChange={this.handleChange}
           clickSubmit={this.clickSubmit}
+          recaptchaHandler={this.recaptchaHandler}
         />
       </div>
     );
