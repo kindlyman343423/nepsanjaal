@@ -16,12 +16,13 @@ exports.userById = async (req, res, next, id) => {
   }
   user.salt = undefined;
   user.hashed_password = undefined;
+  user.resetPasswordLink = undefined;
   req.profile = user; // adds profile object in req with user info
   next();
 };
 
 exports.getAllUsers = async (req, res) => {
-  const users = await User.find().select("name email created updated");
+  const users = await User.find().select("name email created updated role");
 
   res.json(users);
 };

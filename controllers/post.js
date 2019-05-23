@@ -5,7 +5,7 @@ const _ = require("lodash");
 
 exports.postById = async (req, res, next, id) => {
   const post = await Post.findById(id)
-    .populate("postedBy", "name")
+    .populate("postedBy", "name role")
     .populate("comments.postedBy", "name");
   if (!post) {
     return res.status(400).json({

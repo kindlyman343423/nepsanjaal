@@ -34,13 +34,13 @@ exports.signin = async (req, res) => {
     });
   }
   // generate a token with user id and secret
-  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+  const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET);
   // persist the token as 't' in cookie with expiry date
   res.cookie("t", token, { expire: new Date() + 9999 });
   // retrun response with user and token to frontend client
 
-  const { _id, email: mail, name } = user;
-  return res.json({ token, user: { _id, mail, name } });
+  const { _id, email: mail, name, role } = user;
+  return res.json({ token, user: { _id, mail, name, role } });
 };
 
 exports.signout = (req, res) => {
@@ -76,10 +76,10 @@ function parseToken(token) {
 }
 
 exports.hasAuthorization = (req, res, next) => {
-  const authorized =
-    req.profile &&
-    req.auth &&
-    req.profile._id.toString() === req.auth._id.toString();
+  let sameUser = req.profile && req.auth && req.profile._id.toString() === req.auth._id.toString();
+  let adminUser = req.profile && req.auth && req.auth.role === "admin";
+
+  const authorized = sameUser || adminUser;
   if (!authorized) {
     return res.status(403).json({
       error: "User is not authorized to perform this action"
@@ -89,10 +89,10 @@ exports.hasAuthorization = (req, res, next) => {
 };
 
 exports.isPoster = (req, res, next) => {
-  let isPoster =
-    req.post &&
-    req.auth &&
-    req.post.postedBy._id.toString() === req.auth._id.toString();
+  let sameUser = req.post && req.auth && req.post.postedBy._id.toString() === req.auth._id.toString();
+  let adminUser = req.post && req.auth && req.auth.role === "admin";
+
+  let isPoster = sameUser || adminUser;
 
   if (!isPoster) {
     return res.status(403).json({
