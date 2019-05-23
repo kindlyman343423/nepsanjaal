@@ -19,7 +19,7 @@ mongoose
   });
 
 // apiDocs
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   fs.readFile("docs/apiDocs.json", (err, data) => {
     if (err) {
       res.status(400).json({
@@ -39,9 +39,9 @@ app.use(expressValidator());
 app.use(cors());
 
 //Routes
-app.use("/", require("./routes/post"));
-app.use("/", require("./routes/auth"));
-app.use("/", require("./routes/user"));
+app.use("/api", require("./routes/post"));
+app.use("/api", require("./routes/auth"));
+app.use("/api", require("./routes/user"));
 
 app.use("*", (req, res) => {
   res.status(404).json({ error: "No route found" });
