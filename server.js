@@ -44,10 +44,6 @@ app.use("/api", require("./routes/post"));
 app.use("/api", require("./routes/auth"));
 app.use("/api", require("./routes/user"));
 
-app.use("*", (req, res) => {
-  res.status(404).json({ error: "No route found" });
-});
-
 // Error handling middleware
 app.use(function(err, req, res, next) {
   console.log(err);
@@ -61,6 +57,10 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
+
+app.use("*", (req, res) => {
+  res.status(404).json({ error: "No route found" });
+});
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
