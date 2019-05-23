@@ -54,7 +54,7 @@ exports.requireSignin = async (req, res, next) => {
   if (token) {
     const user = parseToken(token);
 
-    const founduser = await User.findById(user._id).select("name");
+    const founduser = await User.findById(user._id).select("name role");
 
     if (founduser) {
       req.auth = founduser;
@@ -89,6 +89,7 @@ exports.hasAuthorization = (req, res, next) => {
 };
 
 exports.isPoster = (req, res, next) => {
+  console.log(req.auth)
   let sameUser = req.post && req.auth && req.post.postedBy._id.toString() === req.auth._id.toString();
   let adminUser = req.post && req.auth && req.auth.role === "admin";
 

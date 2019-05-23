@@ -14,8 +14,10 @@ class DeleteUser extends Component {
     if (data.error) {
       console.log(data.error);
     } else {
-      // signout user
-      signout(() => console.log("User is deleted"));
+      if (!isAuthenticated().user.role === "admin") {
+        signout(() => console.log("User is deleted"));
+      }
+
       // redirect
       this.setState({ redirect: true });
     }
