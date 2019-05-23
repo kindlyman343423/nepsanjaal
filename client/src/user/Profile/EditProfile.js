@@ -99,12 +99,18 @@ class EditProfile extends Component {
 
       const data = await updateUser(userId, token, this.userData);
       if (data.error) this.setState({ error: data.error, loading: false });
-      else
-      updateUserInLocalStorage(data, () => {
+      else {
+        if (isAuthenticated().user.role !== "admin") {
+          updateUserInLocalStorage(data, () => {
+            this.setState({
+              redirectToProfile: true
+            });
+          });
+        }
         this.setState({
-            redirectToProfile: true
+          redirectToProfile: true
         });
-    });
+      }
     }
   };
 
@@ -115,9 +121,7 @@ class EditProfile extends Component {
       return <Redirect to={`/user/${this.state.id}`} />;
     }
 
-    const photoUrl = id
-      ? getProfileImage(id)
-      : DefaultProfile;
+    const photoUrl = id ? getProfileImage(id) : DefaultProfile;
 
     return (
       <div className="container">
