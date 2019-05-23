@@ -1,4 +1,4 @@
-const User = require("../models/user");
+const User = require("../models/User");
 const _ = require("lodash");
 const formidable = require("formidable");
 const fs = require("fs");
