@@ -4,6 +4,7 @@ import SigninForm from "./SigninForm";
 
 import { signin, authenticate } from "../../utils/Requests";
 import SocialLogin from "./SocialLogin";
+import { handleRecaptcha } from "../../utils/helpers";
 
 class Signin extends Component {
   constructor() {
@@ -13,13 +14,19 @@ class Signin extends Component {
       password: "",
       error: "",
       redirectToReferer: false,
-      loading: false
+      loading: false,
+      recaptcha: false
     };
   }
 
   handleChange = event => {
     this.setState({ error: "" });
     this.setState({ [event.target.name]: event.target.value });
+  };
+
+  recaptchaHandler = e => {
+    let recaptcha = handleRecaptcha(e);
+    this.setState({ recaptcha});
   };
 
   clickSubmit = async event => {
@@ -31,13 +38,19 @@ class Signin extends Component {
       password
     };
 
-    const data = await signin(user);
-    if (data.error) {
-      this.setState({ error: data.error, loading: false });
+    if (this.state.recaptcha) {
+      const data = await signin(user);
+      if (data.error) {
+        this.setState({ error: data.error, loading: false });
+      } else {
+        // authenticate
+        authenticate(data, () => {
+          this.setState({ redirectToReferer: true });
+        });
+      }
     } else {
-      // authenticate
-      authenticate(data, () => {
-        this.setState({ redirectToReferer: true });
+      this.setState({
+        error: "What day is today? Please write a correct answer!", loading: false
       });
     }
   };
@@ -71,6 +84,7 @@ class Signin extends Component {
               stateValues={this.state}
               handleChange={this.handleChange}
               clickSubmit={this.clickSubmit}
+              recaptchaHandler={this.recaptchaHandler}
             />
             <p>
               <Link to="/forgot-password" className="btn btn-raised btn-danger">

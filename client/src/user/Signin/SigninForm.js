@@ -1,7 +1,7 @@
 import React from "react";
 
 const SigninForm = props => {
-  const { email, password } = props;
+  const { email, password, recaptcha } = props.stateValues;
   return (
     <form>
       <div className="form-group">
@@ -24,6 +24,19 @@ const SigninForm = props => {
           value={password}
         />
       </div>
+
+      <div className="form-group">
+        <label className="text-muted">
+          {recaptcha ? "Thanks. You got it!" : "What day is today?"}
+        </label>
+
+        <input
+          onChange={props.recaptchaHandler}
+          type="text"
+          className="form-control"
+        />
+      </div>
+
       <button
         onClick={props.clickSubmit}
         className="btn btn-raised btn-primary"
