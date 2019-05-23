@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const expressValidator = require("express-validator");
+const path = require('path')
 const fs = require("fs");
 const cors = require("cors");
 require("express-async-errors");
